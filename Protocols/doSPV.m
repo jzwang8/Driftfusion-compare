@@ -97,7 +97,7 @@ spvsol.dk = sol_dk;
 spvsol.dk.par.mobseti = 1;
 spvsol.int1 = Int;
 
-%spvsol.dat = spvana5(spvsol);
+% spvsol.dat = spvana(spvsol);
 
 disp('SPV complete')
 

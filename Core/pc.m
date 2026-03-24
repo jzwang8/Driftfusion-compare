@@ -61,7 +61,7 @@ classdef pc
         m = 0;
 
         %% Spatial mesh
-        % xmesh_type specification - see MESHGEN_X.
+        % xmesh_type specification - see MESHGniEN_X.
         xmesh_type = 'erf-linear';
         xmesh_coeff = [0.7];        % Coefficient array for defining point spacing
         
@@ -108,7 +108,7 @@ classdef pc
         % default: Approximate Uniform generation rate @ 1 Sun for 510 nm active layer thickness
 
         %% Pulse settings
-        pulsepow = 10;          % Pulse power [mW cm-2] OM2 (Beer-Lambert and Transfer Matrix only)
+        pulsepow = 1;          % Pulse power [mW cm-2] OM2 (Beer-Lambert and Transfer Matrix only)
 
         %%%%%%%%%%% LAYER MATERIAL PROPERTIES %%%%%%%%%%%%%%%%%%%%
         % Numerical values should be given as a row vector with the number of
@@ -144,7 +144,7 @@ classdef pc
         % PCBM eDOS:
         
         %% Mobile ions        
-        N_ionic_species = 1;        
+        N_ionic_species = 0;        
         Nani = [1e19];                  % Mobile ion defect density [cm-3] - A. Walsh et al. Angewandte Chemie, 2015, 127, 1811.
         Ncat = [1e19];                  % Mobile ion defect density [cm-3] - A. Walsh et al. Angewandte Chemie, 2015, 127, 1811.
         z_c = 1;                        % Integer charge state for cations
@@ -231,6 +231,16 @@ classdef pc
         J_E_func = [];
         J_E_func_tilted = [];
         E2_func = [];
+
+        %% Singlet fission parameters
+        Tetracene_TF = false;    % Defines if tetracene is used in the calculation or not
+        extra_holes = 0;        % extra hole density to include for tetracene
+        extra_electrons = 0;
+        Vcharging = 0;          % Charging of tetracene layer leads to extra voltage
+        g_inj = 0;              % Extra injected charge carriers at the right boundary
+        Extra_charge = [0];
+        eta = 1;
+        kappa = 0; % no reflection = 0,
     end
 
     %%  Properties whose values depend on other properties (see 'get' methods).
@@ -569,7 +579,7 @@ classdef pc
             % same thing
             value = par.layer_points;
         end
-
+        
         %% Active layer thickness
         function value = get.d_active(par)
             value = sum(par.dcell(par.active_layer(1):par.active_layer(end)));

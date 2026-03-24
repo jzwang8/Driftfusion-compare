@@ -1,0 +1,42 @@
+
+=== Error at 19-Mar-2026 15:30:02 ===
+File: QSSPC_ND1.6e+15_sp10_Vi-0.0500.mat
+Params: ND=1.65e+15, EF0=-4.3291, sp_r=10, Vi=-0.0500, Qf=-5.90e+11, Phi_R=-4.3791
+Error: Unable to perform assignment because brace indexing is not supported for variables of this type.
+  run_sweep_chunk_qsspc (line 133)
+
+=== Error at 19-Mar-2026 15:30:03 ===
+File: QSSPC_ND1.6e+15_sp10_Vi-0.0200.mat
+Params: ND=1.65e+15, EF0=-4.3291, sp_r=10, Vi=-0.0200, Qf=-2.36e+11, Phi_R=-4.3491
+Error: Unable to perform assignment because brace indexing is not supported for variables of this type.
+  run_sweep_chunk_qsspc (line 133)
+
+=== Error at 19-Mar-2026 15:30:04 ===
+File: QSSPC_ND1.6e+15_sp10_Vi-0.0100.mat
+Params: ND=1.65e+15, EF0=-4.3291, sp_r=10, Vi=-0.0100, Qf=-1.18e+11, Phi_R=-4.3391
+Error: Unable to perform assignment because brace indexing is not supported for variables of this type.
+  run_sweep_chunk_qsspc (line 133)
+
+=== Error at 19-Mar-2026 15:43:21 ===
+File: QSSPC_ND1.6e+15_sp10_Vi-0.0500.mat
+Params: ND=1.65e+15, EF0=-4.3291, sp_r=10, Vi=-0.0500, Qf=-5.90e+11, Phi_R=-4.3791
+Error: Index in position 1 exceeds array bounds. Index must not exceed 1.
+  extract_IC (line 34)
+  equilibrate (line 109)
+  run_sweep_chunk_qsspc (line 166)
+
+=== Error at 19-Mar-2026 15:48:11 ===
+File: QSSPC_ND1.0e+17_sp10_Vi-0.0500.mat
+Params: ND=1.00e+17, EF0=-4.2230, sp_r=10, Vi=-0.0500, Qf=-5.90e+11, Phi_R=-4.2730
+Error: Index in position 1 exceeds array bounds. Index must not exceed 1.
+  extract_IC (line 34)
+  equilibrate (line 109)
+  run_sweep_chunk_qsspc (line 166)
+
+=== Error at 19-Mar-2026 16:03:07 ===
+File: QSSPC_ND1.0e+17_sp10_Vi-0.0500.mat
+Params: ND=1.00e+17, EF0=-4.2230, sp_r=10, Vi=-0.0500, Qf=-5.90e+11, Phi_R=-4.2730
+Error: Index in position 1 exceeds array bounds. Index must not exceed 1.
+  extract_IC (line 34)
+  equilibrate (line 109)
+  run_sweep_chunk_qsspc (line 154)

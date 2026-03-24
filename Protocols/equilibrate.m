@@ -86,7 +86,6 @@ par.t0 = par.tmax/1e6;
 %% Solution with mobility switched on
 disp('Solution with mobility switched on')
 sol = df(sol, par);
-
 all_stable = verifyStabilization(sol.u, sol.t, 0.7);
 
 % loop to check electrons have reached stable config- if not accelerate ions by
@@ -105,7 +104,8 @@ while any(all_stable) == 0
 end
 
 soleq.el = sol;
-% Manually check final section of solution for VSR self-consitency
+% Manually check final section of solution for VSR self-consistency
+disp(soleq.el.t)
 sol_ic = extract_IC(soleq.el, [soleq.el.t(end)*0.7, soleq.el.t(end)]);
 compare_rec_flux(sol_ic, par.RelTol_vsr, par.AbsTol_vsr, 0);
 % Switch VSR check on for future use

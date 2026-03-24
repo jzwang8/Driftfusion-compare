@@ -14,6 +14,8 @@
 % Obtain the base parameters
 par_explore = pc('input_files/3_layer_test.csv');
 
+idx_active = par_explore.active_layer
+
 % For the first example we will run JV and steady-state Voc for 3 different
 % active layer thicknesses and light intensities 
 parex_dactive_light = explore.explore2par(par_explore, {'d(1,3)','Int'},...

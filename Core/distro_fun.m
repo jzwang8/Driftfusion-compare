@@ -44,6 +44,7 @@ classdef distro_fun
                     eta_n = (Efn-Ec)./kT;
                     n = Nc.*(1./(exp(-eta_n) + par.gamma));
                     
+
                 case 'Boltz'
                     n = Nc.*exp((Efn-Ec)./kT);
             end

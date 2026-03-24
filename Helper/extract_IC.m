@@ -29,6 +29,8 @@ elseif length(requested_time) == 2
 end
 
 sol_ic = sol;
+disp(index)
+disp(size(sol.u))
 sol_ic.u = sol.u(index, :, :);
 
 % Overwrite Vapp

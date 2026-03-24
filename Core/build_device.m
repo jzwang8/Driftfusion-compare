@@ -26,7 +26,7 @@ dev.sn = build_property(par.sn, xmesh, par, 'constant', 1);
 dev.sp = build_property(par.sp, xmesh, par, 'constant', 1);
 dev.mu_n = build_property(par.mu_n, xmesh, par, 'constant', 0);
 dev.mu_p = build_property(par.mu_p, xmesh, par, 'constant', 0);
-    
+dev.Extra_charge = build_property(par.Extra_charge, xmesh, par, 'constant', 0); % **Willem added**
 % Linearly graded properties
 dev.Phi_EA = build_property(par.Phi_EA, xmesh, par, 'lin_graded', 0);
 dev.Phi_IP = build_property(par.Phi_IP, xmesh, par, 'lin_graded', 0);

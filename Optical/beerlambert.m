@@ -4,7 +4,7 @@ function Gentot = beerlambert(par, x, source_type, laserlambda, figson)
 % PAR - Parameters object
 % SOURCE_TYPE - Currently either 'AM15' or 'laser'
 % LASERLAMBDA - pulse wavelength only applied when 'laser' is chosen as the
-% source. must be between 300 - 767 nm (owing to n & k data limits)
+% source. must be between 300 - 1200 nm (owing to n & k data limits)
 % FIGSON - logical toggling figures
 
 %% Output arguments
@@ -25,7 +25,7 @@ function Gentot = beerlambert(par, x, source_type, laserlambda, figson)
 h = 6.626e-34;
 c = 2.998e8;
 
-lambda = 300:767;  % wavelength range - currently limited by database MUST BE IN nm
+lambda = 300:1200;  % wavelength range - currently limited by database MUST BE IN nm
 
 switch par.side
     case 'left'
@@ -53,7 +53,7 @@ switch source_type
             error(msg);
         end
         I0 = zeros(length(lambda));
-        I0(laserlambda-lambda(1)) = 1e-3*par.pulsepow;   % convert to W cm-2 nm-1
+        I0(laserlambda-lambda(1)) = 1e-3*par.pulsepow;   % convert to W cm-2
     otherwise
         warning('Light source unknown. Usinng AM1.5 as default')
         I0 = lightsource('AM15', lambda);                % W cm-2 nm-1
@@ -94,16 +94,19 @@ for i = 1:length(x)
     alpha(i,:) = 4*pi*k(i,:)./(lambda*1e-7);    % alpha in cm-1
 end
 
+[fSi, fTc] = TransferMatrix(lambda);
+
 I = zeros(length(x), length(lambda));
 
 for i = 1:length(x)
 for j = 1:length(lambda)
+    
     if i == 1
         I(1,j) = I0(j);
-        Gen(1, j) = I(1, j)*alpha(1, j)/Eph(j);
+        Gen(1, j) = (par.Tetracene_TF * (fSi(j) - 1) + 1) * I(1, j)*alpha(1, j)/Eph(j);
     else
         I(i,j) = I0(j)*exp(-alpha(i,j)*(x(i)-x(i-1)));
-        Gen(i, j) = I(i, j)*alpha(i, j)/Eph(j);
+        Gen(i, j) = (par.Tetracene_TF * (fSi(j) - 1) + 1) * I(i, j)*alpha(i, j)/Eph(j);
         I0(j) = I(i, j);  % Set I0 for new layer
     end
 end
@@ -118,6 +121,20 @@ if strcmp(par.side,'right')
 end
 
 if figson == 1
+
+figure
+hold on
+plot(lambda, k(1,:), 'DisplayName','\kappa')
+plot(lambda, n(1,:), 'DisplayName','n')
+ylabel('Index of refraction')
+xlabel('wavelength [nm]')
+legend
+hold off
+
+figure
+semilogy(lambda, alpha(300,:))
+ylabel('\alpha [cm^{-1}]')
+xlabel('wavelength [nm]')
 
 figure(31)
 surf(lambda, par.xx*1e7, I)

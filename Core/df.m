@@ -13,7 +13,7 @@ function solstruct = df(varargin)
 %   [time, space, variable]. The order of the variables are as follows:
 %   u(1) = V = Electrostatic potential
 %   u(2) = n = Electron density
-%   u(3) = p = uHole density
+%   u(3) = p = Hole density
 %   u(4) = c = Cation density (optional)
 %   u(5) = a = Anion density (optional)
 % ? The spatial mesh x.
@@ -83,6 +83,8 @@ n0_r = par.n0_r;
 p0_l = par.p0_l;
 p0_r = par.p0_r;
 dev = par.dev;
+extra_holes = par.extra_holes;
+extra_electrons = par.extra_electrons;
 
 %% Constants
 kB = par.kB;
@@ -121,6 +123,8 @@ nt = device.nt;             % SRH electron trap constant
 pt = device.pt;             % SRH hole trap constant
 NA = device.NA;             % Acceptor doping density
 ND = device.ND;             % Donor doping density
+Extra_charge = device.Extra_charge; % Extra charge to model ZnPc
+disp(['Extra charge = ', num2str(sum(Extra_charge))])
 % Set up counter ion density arrays
 switch N_ionic_species
     case 0                  % Nani, Ncat, a, and c set to zero for Poisson
@@ -195,6 +199,7 @@ end
 
 % Check for negative generation and deal error if present
 gM = g1_fun(g1_fun_arg, t')*gx1 + g2_fun(g2_fun_arg, t')*gx2;
+%%gM = g1_fun(g1_fun_arg, t')*gx1
 if any(any(gM < 0))
     error('Generation cannot be negative - please check your generation function and associated inputs')
 end
@@ -228,8 +233,10 @@ options = odeset('MaxStep', par.MaxStepFactor*0.1*par.tmax, 'RelTol', par.RelTol
 %% Call solver
 % inputs with '@' are function handles to the subfunctions
 % below for the: equation, initial conditions, boundary conditions
+disp('pdepe start')
 u = pdepe(par.m,@dfpde,@dfic,@dfbc,x,t,options);
-
+disp('pdepe finished')
+% par.F = dfpde;
 %% Outputs
 % Solutions and meshes to structure
 solstruct.u = u;
@@ -249,6 +256,7 @@ end
 % C = Time-dependence prefactor
 % F = Flux terms
 % S = Source terms
+
     function [C,F,S] = dfpde(x,t,u,dudx)
         % reset position point
         if x == x_sub(1)
@@ -268,6 +276,7 @@ end
             gxt2 = g2_fun(g2_fun_arg, t)*gx2(i);
         end
         g = gxt1 + gxt2;
+        %%g = gxt1;
         
         %% Unpack Variables
         u_maxvar(1:N_variables) = u;
@@ -317,9 +326,10 @@ end
             /(taun_vsr(i)*(p*exp(-beta*xprime_p(i)) + pt(i)) + taup_vsr(i)*(n*exp(-alpha*xprime_n(i)) + nt(i))));
         % Total electron and hole recombination
         r_np = r_rad + r_srh + r_vsr;
-        
+                        
         % Source terms
-        S_V = (1/(epp_factor*epp0))*(-n + p - NA(i) + ND(i) + z_a*a + z_c*c - z_a*Nani(i) - z_c*Ncat(i));
+        % NOTE - ADDED IN EXTRA CHARGE 
+        S_V = (q/(epp_factor*epp0))*(-n + p - NA(i) + ND(i) + z_a*a + z_c*c - z_a*Nani(i) - z_c*Ncat(i) + Extra_charge(i));
         S_n = g - r_np;
         S_p = g - r_np;
         S_c = 0;
@@ -418,8 +428,8 @@ end
         end
         
         Pl = [-V_l;
-            mobset*(-sn_l*(n_l - n0_l));
-            mobset*(-sp_l*(p_l - p0_l));
+            mobset*(-sn_l*(n_l - n0_l) );
+            mobset*(-sp_l*(p_l - p0_l) );
             0;
             0;];
         
@@ -430,8 +440,8 @@ end
             1;];
         
         Pr = [-V_r+Vbi-Vapp-Vres;
-            mobset*(sn_r*(n_r - n0_r));
-            mobset*(sp_r*(p_r - p0_r));
+            mobset*(sn_r*(n_r - n0_r - extra_electrons));
+            mobset*(sp_r*(p_r - p0_r - extra_holes));
             0;
             0;];
         

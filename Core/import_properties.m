@@ -21,7 +21,7 @@ function par = import_properties(par, filepath)
 % (at your option) any later version.
 %
 %% Start code
-T = readtable(filepath{1,1});   % Reads-in in the external .CSV file to a table T
+T = readtable(filepath{1,1}, 'VariableNamingRule', 'preserve');   % Reads-in in the external .CSV file to a table T
 
 % Layer type array
 try
@@ -91,6 +91,9 @@ par.B = import_single_property(par.B, T, {'B', 'krad', 'kbtb'}, start_row, end_r
 par.taun = import_single_property(par.taun, T, {'taun', 'taun_SRH'}, start_row, end_row);
 % Hole SRH time constant
 par.taup = import_single_property(par.taup, T, {'taup', 'taup_SRH'}, start_row, end_row);
+% Extra charge
+par.Extra_charge = import_single_property(par.Extra_charge , T, {'Extra_charge'}, start_row, end_row);
+
 % Electron and hole surface recombination velocities
 if strcmp(layer_type{1}, 'electrode')
     sn = import_single_property(par.sn, T, {'sn'}, 1, length(layer_type));
@@ -169,6 +172,11 @@ end
             catch
                 error_checker(j) = 1;
             end
+            % try
+            %     par.extra_holes = T{1, 'extra_holes'};
+            % catch
+            %     warning('extra_holes is undefined in .csv. using default in PC')
+            % end
         end
 
         if all(error_checker)

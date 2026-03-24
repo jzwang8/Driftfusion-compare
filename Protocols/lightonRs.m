@@ -3,7 +3,8 @@ function sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
 % series resistance Rs
 %% Input arguments
 % SOL_INI = initial conditions
-% int1 = Bias light intensity (Suns)
+% int1 = max fraction of light intensity used for generation rate of charge
+% carriers.
 % stable_time = Stabilisation time - length of the transient. Setting to -stable_time
 % to cycle to stable solution from initial time of stable_time
 % MOBSETI = Ion mobility switch

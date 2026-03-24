@@ -46,7 +46,7 @@ else
         V_half(end+1) = V_other_half;
         Vapp = V_half;
     else
-        J = [J_half J_other_half];
+        J = [J_half J_other_half]';
         Vapp = [V_half V_other_half]';
     end
 end

@@ -1,4 +1,4 @@
-classdef dfplot
+    classdef dfplot
     % DRIFTFUSION Plotting class - contains methods for plotting
     %
     % List of available plots:
@@ -129,7 +129,7 @@ classdef dfplot
                 J.dk.r = dfana.calcJ(JV.dk.r, "sub");
                 Vapp.dk.r = dfana.calcVapp(JV.dk.r);
 
-                figure(4)
+                figure%(4)
                 plot(Vapp.dk.f, J.dk.f.tot(:,end), '--', Vapp.dk.r, J.dk.r.tot(:,end));
                 hold on
             end
@@ -141,13 +141,13 @@ classdef dfplot
                 J.ill.r = dfana.calcJ(JV.ill.r, "sub");
                 Vapp.ill.r = dfana.calcVapp(JV.ill.r);
 
-                figure(4)
+                figure%(4)
                 plot(Vapp.ill.f, J.ill.f.tot(:,end),'--')%, 'Color', [0, 0.4470, 0.7410]);
                 hold on
                 plot(Vapp.ill.r, J.ill.r.tot(:,end));%,'Color', [0, 0.4470, 0.7410]);
             end
 
-            figure(4)
+            % figure%(4)
             xlabel('Applied voltage [V]')
             ylabel('Current density [Acm-2]');
             hold off
@@ -324,8 +324,9 @@ classdef dfplot
             [sol, tarr, pointtype, xrange] = dfplot.sortarg(varargin);
             [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
 
-            figure(13);
+            figure;
             dfplot.x2d(sol, x, {n, p}, {'n', 'p'}, {'-','-'},'Carrier density [cm-3]', tarr, xrange, 0, 1)
+            % dfplot.x2d(sol, x, {n.*p}, {'np'}, {'-'},'np [cm-6]', tarr, xrange, 0, 1)
         end
 
         function nspsx(varargin)
@@ -386,9 +387,16 @@ classdef dfplot
             x_sub = par.x_sub;
             r = dfana.calcr(sol, "sub");
 
-            figure(17)
-            dfplot.x2d(sol, x_sub, {r.btb, r.srh, r.vsr, r.tot},{'rbtb', 'rsrh', 'rvsr', 'rtot'},...
-                {'-','-','-','-'}, 'Recombination rate [cm-3s-1]', tarr, xrange, 0, 0);
+            figure
+            % dfplot.x2d(sol, x_sub, {r.btb, r.srh, r.vsr, r.tot},{'rbtb', 'rsrh', 'rvsr', 'rtot'},...
+            %     {'-','-','-','-'}, 'Recombination rate [cm-3s-1]', tarr, xrange, 0, 0);
+            dfplot.x2d(sol, x_sub, {r.btb, r.srh, r.vsr},{'r_{btb}', 'r_{SRH}', 'r_{vsr}'},...
+                {'-','-','-'}, 'Recombination rate (cm^{-3}s^{-1})', tarr, xrange, 0, 0);
+            % axes('Position',[.2 .53 1.3*.2307 1.3*.2359])
+            % box on
+            % dfplot.x2d(sol, x_sub, {r.btb, r.srh, r.vsr},{'r_{btb}', 'r_{SRH}', 'r_{vsr}'},...
+            %     {'-','-','-'}, '', tarr, xrange, 0, 0);
+            % xlabel('')
         end
 
         function rsrhx(varargin)
@@ -413,6 +421,8 @@ classdef dfplot
             figure(171)
             dfplot.x2d(sol, x_sub, {r.vsr},{''},...
                 {'-'}, 'Surface recombination rate [cm-3s-1]', tarr, xrange, 0, 1);
+
+            disp(max(sol)); % max surface recombination rate
         end
 
         function JrecVapp(JV, option)
@@ -580,7 +590,7 @@ classdef dfplot
             rho = dfana.calcrho(sol, "whole");
             F = dfana.calcF(sol, "whole");
 
-            figure(21)
+            figure;
             subplot(3, 1, 1)
             dfplot.x2d(sol, x, {rho},{'\rho'},{'-'}, 'Charge density [cm-3]', tarr, xrange, 0, 0);
 
@@ -617,7 +627,7 @@ classdef dfplot
             [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
             [Ecb, Evb, Efn, Efp] = dfana.calcEnergies(sol);
 
-            figure(22);
+            figure;
             dfplot.x2d(sol, x, {Efn, Efp, Ecb, Evb}, {'E_{fn}', 'E_{fp}', 'E_{CB}', 'E_{VB}'},...
                 {'--', '--', '-', '-'}, 'Energy [eV]', tarr, xrange, 0, 0)
         end
@@ -865,7 +875,7 @@ classdef dfplot
                     hold on
                 end
             end
-            xlabel('Position [nm]')
+            xlabel('Position (nm)')
             ylabel(ylab)
             if logy == 1
                 set(gca, 'YScale','log');
